@@ -1,0 +1,152 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://kit.fontawesome.com/8aa17a250d.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="loader.css">
+<style>
+    #loader { display: flex; }
+    body { background: #eee6df; }
+    .profile > img { width: 110px; border: 10px solid #101e40; border-radius: 125px; }
+    .point > p > span { color: #009cd1; font-weight: 700; font-size: 20px; }
+    .links { margin: 25px 15px; }
+    .links-help { 
+        display: flex;
+        gap: 15px;
+        flex-direction: column;
+    }
+    .links-help > a {
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        gap: 10px;
+        border-radius: 4px;
+        box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+        background: #fffff6;
+    }
+    .color { 
+        background: #101e40;
+        height: 120px;
+     }
+     .profile { 
+        display: flex;
+        align-items: center; 
+        justify-content: center;
+        flex-direction: column;
+        gap: 10px;
+        margin: -50px 0 0 0;
+     }
+     i {
+        font-size: 20px;
+        color: #01a0de;
+     }
+     .baap {
+        text-align: center;
+        font-size: 26px;
+        margin: 15px 0;
+        font-weight: 500;
+        color: #06070b;
+     }
+     .point { 
+        background: #fffff6;
+        margin: 0 15px;
+        display: flex;
+        justify-content: space-evenly;
+        border-radius: 8px;
+        padding: 25px 10px;
+        box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+     }
+     .links-help > a > span {
+        font-size: 20px;
+        font-weight: 600;
+        color: #797471;
+     }
+     .point > p {
+        display: flex;
+        flex-direction: column-reverse;
+        color: #78786e;
+        align-items: center;
+        justify-content: center;
+     }
+</style>
+<div class="container">
+    <div id="userInfo" class="info"></div>
+    <div id="loader">
+    <div class="loader"></div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        let username = localStorage.getItem("tour_local");
+        if (!username) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        $(".loader").show();
+
+        fetch("https://script.google.com/macros/s/AKfycbw5GrRhmcg2cffKlqWF9RoptJAUplwTotnWLqtHUGky-486CjMbmQ1HVBXcfL7II9HP/exec", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({ username })
+        })
+        .then(response => response.json())
+        .then(data => {
+            $(".loader").hide();
+            if (data.error) {
+                $("#userInfo").html("<p style='color: red;'>" + data.error + "</p>");
+            } else {
+                $("#userInfo").html(`
+                <div class="color"></div>
+                <div class="profile">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4128/4128244.png">
+                </div>
+                <p class="baap"><span><strong>${data.name}</strong></span></p>
+                <div class="point">
+                    <p><strong>Coins</strong><span> ${data.coins}</span></p>
+                    <hr />
+                    <p><strong>Reffered</strong><span> ${data.referred}</span></p>
+                    <hr />
+                    <p><strong>Status</strong><span> ${data.status}</span></p>
+                </div>
+                <div class="links">
+                    <div class="links-help">
+                        <a href="add_coins.html">
+                            <i class="fa-solid fa-coins" style="display: flex;"></i>
+                            <span>Coins</span>
+                        </a>
+                        <a href="withdraw.html">
+                            <i class="fa-solid fa-sack-dollar" style="display: flex;"></i>
+                            <span>Withdraw</span>
+                        </a>
+                        <a href="withdraw_history.html">
+                            <i class="fa-solid fa-arrow-rotate-left" style="display: flex;"></i>
+                            <span>History</span>
+                        </a>
+                        <a href="leaderboard.html">
+                            <i class="fa-solid fa-chart-simple" style="display: flex;"></i>
+                            <span>Players</span>
+                        </a>
+                        <a href="https://t.me/noxdabattle">
+                            <i class="fa-solid fa-headphones-simple" style="display: flex;"></i>
+                            <span>Support</span>
+                        </a>
+                        <a id="logoutBtn">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                            <span>Logout</span></a>
+                    </div>
+                `);
+
+                $("#logoutBtn").click(function() {
+                    localStorage.removeItem("tour_local");
+                    window.location.href = "login.html";
+                });
+            }
+        })
+        .catch(() => {
+            $(".loader").hide();
+            $("#userInfo").html("<p style='color: red;'>Error fetching data.</p>");
+        });
+    });
+</script>

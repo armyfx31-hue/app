@@ -1,0 +1,22 @@
+{
+    "name": "Noxda Battle",
+    "short_name": "Noxda Battle",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#22293b",
+    "theme_color": "#22293b",
+    "description": "Noxda Battle Web App",
+    "icons": [
+      {
+        "src": "https://i.ibb.co/qYb6CP3N/icon.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "https://i.ibb.co/qYb6CP3N/icon.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+  }
+  
